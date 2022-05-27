@@ -1,0 +1,25 @@
+LABEL_CATALOG:
+  PubLayNet:
+    0: Text
+    1: Title
+    2: List
+    3: Table
+    4: Figure
+  Sanskrit_Finetuned:
+    0: bg
+    1: Image
+    2: Math
+    3: Table
+    4: Text
+WEIGHT_CATALOG:
+  Sanskrit_PubLayNet_faster_rcnn: https://www.dropbox.com/s/qb1d4edsh9oa50c/model_faster_publayout_comb.pth?dl=1
+  Sanskrit_PubLayNet_mask_rcnn_X101: https://www.dropbox.com/s/7onhy14lfjmd82u/model_mask_publayout_comb.pth?dl=1
+  Sanskrit_COCO_faster_rcnn:
+  Sanskrit_COCO_mask_rcnn:
+MODEL_CATALOG:
+  PubLayNet_faster_rcnn: PubLayNet_faster_rcnn_R_50_FPN_3x.yml
+  PubLayNet_mask_rcnn_R50: PubLayNet_mask_rcnn_R_50_FPN_3x.yml
+  PubLayNet_mask_rcnn_X101: PubLayNet_mask_rcnn_X_101_32x8d_FPN_3x.yml
+
+
+
