@@ -31,15 +31,13 @@ from detectron2.structures import BoxMode
 import yaml
 from detectron2.data.datasets import register_coco_instances
 
-def infer_layout(img_path, layout_model, confidence, output_dir):
+def infer_layout(config_name, image, confidence_threshold):
   custom_config = "custom_labels_weights.yml"
   with open(custom_config, 'r') as stream:
       custom_yml_loaded = yaml.safe_load(stream)
 
-  config_list = list(custom_yml_loaded['WEIGHT_CATALOG'].keys()) + list(custom_yml_loaded['MODEL_CATALOG'].keys())
-
   config_filePath = "configs/layout_parser_configs"
-  config_name = layout_model
+
 
   # Capture model weights
 
@@ -59,10 +57,6 @@ def infer_layout(img_path, layout_model, confidence, output_dir):
 
   label_list = list(label_mapping.values())
 
-  # Setting the confidence threshold
-
-  confidence_threshold = confidence
-
   # Set custom configurations
 
   cfg = get_cfg()
@@ -77,12 +71,8 @@ def infer_layout(img_path, layout_model, confidence, output_dir):
   # Get predictions
 
   predictor = DefaultPredictor(cfg)
-  im = cv2.imread(img_path)
-  im_name = img_path.split("/")[-1]
-  cv2.imwrite(f"{output_dir}/{im_name}", im)
-  outputs = predictor(im)
-  #print(outputs["instances"].pred_classes)
-  #print(outputs["instances"].pred_boxes)
+  image_width, image_height, _ = image.shape
+  outputs = predictor(image)
   
   # Save predictions
 
@@ -90,21 +80,18 @@ def infer_layout(img_path, layout_model, confidence, output_dir):
   DatasetCatalog.clear()
   MetadataCatalog.get(f"{dataset_name}_infer").set(thing_classes=label_list)
   layout_metadata = MetadataCatalog.get(f"{dataset_name}_infer")
-  #print("Metadata is ",layout_metadata)
+  print("Metadata is ",layout_metadata)
 
-  v = Visualizer(im[:, :, ::-1],
-                      metadata=layout_metadata,
+  v = Visualizer(image[:, :, ::-1],
+                      metadata=layout_metadata, 
                       scale=0.5
         )
   out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
   ans = out.get_image()[:, :, ::-1]
   im = Image.fromarray(ans)
   img_name = 'image_with_predictions.jpg'
-  im.save(f"{output_dir}/{img_name}")
 
-  # extracting, bboxes, scores and labels
-
-  img = Image.open(img_path)
+  img = image
   instances = outputs["instances"].to("cpu")
   boxes = instances.pred_boxes.tensor.tolist()
   scores = instances.scores.tolist()
@@ -122,16 +109,31 @@ def infer_layout(img_path, layout_model, confidence, output_dir):
     l_new = label_name+str(count[label_name])
     info_data = {"box":box, "confidence": score}
     layout_info[l_new] = info_data
-    #print(str(l_new) + ":",box)
 
   # storing the labels and corresponding bbox coordinates in a json
   layout_info_sort = {k: v for k, v in sorted(layout_info.items(), key=lambda item: item[1]["box"][1], reverse=True)}
-  
-  with open(f"{output_dir}/layout_data.json", 'w', encoding='utf-8') as f:
-    json.dump(layout_info_sort, f, ensure_ascii=False, indent=4)
 
-  return img, layout_info
-  
-if __name__ == "__main__":
-    infer_layout()
-    
+  results = []
+  for key, value in layout_info_sort.items():
+    region_id = key
+    for k, v in value.items():
+      if k == 'box':
+        bbox = {
+          'x': 100 * v[0] / image_width,
+          'y': 100 * v[1] / image_height,
+          'width': 100 * (v[2] - v[0]) / image_width,
+          'height': 100 * (v[3] - v[1]) / image_height,
+          'rotation': 0
+        }
+      if k == 'confidence':
+        score = v
+    bbox_result = {
+        'id': region_id, 'from_name': 'bbox', 'to_name': 'image', 'type': 'rectangle',
+        'value': bbox,'score': score}
+    results.extend([bbox_result])
+
+  return {
+    'predictions': [{
+      'result': results
+    }]
+  }
