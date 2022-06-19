@@ -21,7 +21,7 @@ def allowed_file(filename):
 
 @app.route('/')
 def hello_world():
-    return "<h1>Hello World</h1>"
+    return "<h1>Indic-Parser-API</h1>"
 
 @app.route('/v0.1/layout', methods=['POST'])
 def upload_file():
