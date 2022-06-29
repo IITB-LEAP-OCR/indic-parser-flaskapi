@@ -8,6 +8,8 @@ import numpy as np
 import json
 import ast
 
+from indicparser import indic_parser
+
 app = Flask(__name__)
 run_with_ngrok(app)
 
