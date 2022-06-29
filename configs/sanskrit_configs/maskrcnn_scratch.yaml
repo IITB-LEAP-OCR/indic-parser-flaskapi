@@ -1,0 +1,25 @@
+_BASE_: "../scratch_mask_rcnn_R_50_FPN_3x_gn.yaml"
+MODEL:
+  WEIGHTS: model_zoo.get_checkpoint_url("Misc/scratch_mask_rcnn_R_50_FPN_3x_gn.yaml")
+  MASK_ON: True
+  ROI_HEADS:
+    BATCH_SIZE_PER_IMAGE: 64
+    NUM_CLASSES: 5
+DATASETS:
+  TRAIN: ("train_data",)
+  TEST: ("val_data",)
+DATALOADER:
+  NUM_WORKERS: 2
+SOLVER:
+  STEPS: []
+  MAX_ITER: 60000
+  WARMUP_ITERS: 1000
+  GAMMA: 0.05
+  BASE_LR: 0.00025
+  IMS_PER_BATCH: 2
+  CHECKPOINT_PERIOD: 2000
+TEST:
+  EVAL_PERIOD: 500
+    
+    
+
