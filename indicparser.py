@@ -17,6 +17,8 @@ from pathlib import Path
 from uuid import uuid4
 from math import floor
 
+from layout_inference import infer_layout
+
 LEVELS = {
     'page_num': 1,
     'block_num': 2,
