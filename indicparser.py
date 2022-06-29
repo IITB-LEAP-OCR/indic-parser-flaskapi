@@ -92,8 +92,8 @@ def convert_to_ls(image, tesseract_output, file_name, per_level='block_num'):
 
 def indic_parser(inference_flag, lang_model, image, file_name, config_name, confidence_threshold, im):
   infer_flag = inference_flag
-  tessdata_dir_config = r'--tessdata-dir "/content/indic-parser/configs/tessdata"'
-  os.environ["TESSDATA_PREFIX"] = '/content/indic-parser/configs/tessdata'
+  tessdata_dir_config = r'--tessdata-dir "/content/indic-parser-flaskapi/configs/tessdata"'
+  os.environ["TESSDATA_PREFIX"] = '/content/indic-parser-flaskapi/configs/tessdata'
   languages=pytesseract.get_languages(config=tessdata_dir_config)
 
   if lang_model in languages:
