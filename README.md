@@ -4,7 +4,7 @@
 2. ```cd indic-parser-flaskapi```
 3. Install all the packages ```pip install -r packages.txt```
 4. Run app.py ```python app.py```
-5. Send <b>POST</b> request to ngrok server with the Image and config.json file.
+5. Send <b>POST</b> request to ngrok server with the ```image``` and ```config.json``` file.
 
 Provide the Config File in the following format:
 
