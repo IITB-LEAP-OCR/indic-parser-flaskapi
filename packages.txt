@@ -6,5 +6,9 @@ pip install layoutparser[ocr]
 apt-get install poppler-utils
 apt -qq install tesseract-ocr 
 apt -qq install libtesseract-dev
+pip install fastapi
+pip install uvicorn
+pip install python-multipart
+pip install nest-asyncio
 pip install pyngrok
-pip install flask_ngrok
+
