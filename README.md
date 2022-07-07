@@ -1,4 +1,4 @@
-# Flask API for [Indic Parser](https://github.com/document-analysis-tools/indic-parser)
+# FastAPI for [Indic Parser](https://github.com/document-analysis-tools/indic-parser)
 
 1. Clone the Respository
 2. ```cd indic-parser-flaskapi```
