@@ -28,7 +28,7 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: multipart/form-data' \
   -F 'file=@GK2_page-0284.jpg;type=image/jpeg' \
-  -F 'inference=no' \
+  -F 'inference=yes' \
   -F 'lang=san_iitb' \
   -F 'model=Sanskrit_PubLayNet_faster_rcnn' \
   -F 'confidence_threshold=0.5'
