@@ -112,10 +112,8 @@ def indic_parser(inference_flag, lang_model, image, file_name, config_name, conf
     # create_hocr(img_path, languages, int(linput)-1, output_path)
     res = ocr_agent.detect(image, return_response = True)
     tesseract_output = res["data"].to_dict('list')
-    tasks = []
     task = convert_to_ls(image, tesseract_output, file_name, per_level='block_num')
-    tasks.append(task)
-    return tasks
+    return task
   else:
     out = infer_layout(config_name, im, confidence_threshold)
     return out
